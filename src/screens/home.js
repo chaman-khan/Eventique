@@ -42,8 +42,10 @@ export default function Home() {
       <View
         style={{
           width: '100%',
-          alignSelf: 'center',
+          alignItems: 'center',
           backgroundColor: theme.colors.primary,
+          paddingTop: 20,
+          paddingBottom: 35,
         }}>
         <View style={styles.topBar}>
           <TouchableOpacity onPress={isMenuVisible ? hideMenu : showMenu}>
@@ -69,50 +71,52 @@ export default function Home() {
         </View>
         {isMenuVisible && (
           <Animated.View style={[styles.menu, {transform: [{translateY}]}]}>
-            <View>
-              <TouchableOpacity
-                style={{
-                  width: '95%',
-                  height: 50,
-                  backgroundColor: 'white',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 10,
-                  alignSelf: 'center',
-                }}>
-                <Text>Logout</Text>
-              </TouchableOpacity>
-              <Text
-                style={{
-                  color: '#FFF',
-                  fontFamily: 'Roboto',
-                  fontSize: 18,
-                  fontWeight: '400',
-                }}>
-                Change Language
-              </Text>
+            <TouchableOpacity
+              style={{
+                width: width - 20,
+                height: 50,
+                backgroundColor: 'white',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 10,
+                alignSelf: 'center',
+                margin: 20,
+              }}>
+              <Text>Logout</Text>
+            </TouchableOpacity>
+            <Text
+              style={{
+                color: '#FFF',
+                fontFamily: 'Roboto',
+                fontSize: 18,
+                fontWeight: '400',
+              }}>
+              Change Language
+            </Text>
+            <View
+              style={{
+                width: '100%',
+                height: 50,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 100,
+                backgroundColor: 'white',
+                borderRadius: 10,
+                marginTop: 8,
+                paddingHorizontal: 15,
+              }}>
               <View
                 style={{
-                  width: '95%',
+                  width: '30%',
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                 }}>
-                <View
-                  style={{
-                    width: '30%',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Image source={lanuageIcon} />
-                  <Text>{lanuage}</Text>
-                </View>
-                <Image
-                  source={require('../Images/downArrow.png')}
-                  style={{width: '13%'}}
-                />
+                <Image source={lanuageIcon} />
+                <Text>{lanuage}</Text>
               </View>
+              <Image source={require('../Images/downArrow.png')} />
             </View>
           </Animated.View>
         )}
@@ -166,17 +170,19 @@ const styles = StyleSheet.create({
     // left: 0,
     // right: 0,
     // height: 200,
+    width: '95%',
     backgroundColor: theme.colors.primary,
-    borderTopWidth: 1,
-    borderTopColor: 'gray',
+    // borderTopWidth: 1,
+    // borderTopColor: 'gray',
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   topBar: {
-    width: '100%',
-    paddingTop: 20,
+    width: '95%',
+    alignSelf: 'center',
+    // paddingTop: 20,
     backgroundColor: theme.colors.primary,
-    paddingBottom: 35,
+    // paddingBottom: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
