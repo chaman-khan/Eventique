@@ -9,11 +9,12 @@ import {
   Dimensions,
   Modal,
   TextInput,
+  FlatList,
 } from 'react-native';
 import {theme} from '../theme/theme';
 const {width, height} = Dimensions.get('screen');
 
-export default function Home() {
+export default function Home({navigation}) {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [isdropdown, setDropdown] = useState(false);
   const [language, setLanguage] = useState('English');
@@ -29,6 +30,12 @@ export default function Home() {
     require('../Images/german.png'),
   );
   const [isShowModal, setIsShowModal] = useState(false);
+  const [eventData, setEventData] = useState([]);
+  const [eventTitle, setEventTitle] = useState('First Event');
+  const [eventVenue, setEventVenue] = useState('Lahore');
+  const [maxParticipants, setMaxParticipants] = useState('500');
+  const [alertPoint, setAlertPoint] = useState('355');
+  const [numEntries, setNumEntries] = useState('7');
   const ChangeLanguage1 = () => {
     setLanguage(language1);
     setLanguageIcon(language1Icon);
@@ -47,7 +54,30 @@ export default function Home() {
     setLanguage2Icon(language1Icon);
     setDropdown(false);
   };
+  const addEvent = newEvent => {
+    setEvents(prevEvents => [...prevEvents, {eventTitle: newEvent}]);
+  };
   const CreateEvent = () => {
+    const handleMinusPress = () => {
+      // Decrease numEntries by 1, but not below 0
+      setNumEntries(prevNumEntries =>
+        Math.max(Number(prevNumEntries) - 1, 0).toString(),
+      );
+    };
+    const handlePlusPress = () => {
+      // Increase numEntries by 1, but not beyond maxParticipants
+      setNumEntries(prevNumEntries => {
+        const incrementedValue = Number(prevNumEntries) + 1;
+        const maxAllowedValue = Number(maxParticipants); // Assuming maxParticipants is a state or prop
+
+        return Math.min(incrementedValue, maxAllowedValue).toString();
+      });
+    };
+    const handleCreateEvent = newEvent => {
+      // Handle the creation of the event and update the state
+      setEventData(prevData => [...prevData, newEvent]);
+      setIsShowModal(false);
+    };
     return (
       <Modal transparent>
         <View style={styles.bgModal}>
@@ -55,16 +85,31 @@ export default function Home() {
             <Text style={styles.newEventTxt}>CREATE NEW EVENT</Text>
             <View style={styles.input}>
               <Text style={{fontSize: 10, padding: 0}}>EVENT TITLE</Text>
-              <TextInput style={{padding: 0}} placeholder="Some event title" />
+              <TextInput
+                style={{padding: 0}}
+                placeholder="Some event title"
+                value={eventTitle}
+                onChangeText={text => setEventTitle(text)}
+              />
             </View>
             <View style={styles.input}>
               <Text style={{fontSize: 10, padding: 0}}>VENUE</Text>
-              <TextInput style={{padding: 0}} placeholder="Some location" />
+              <TextInput
+                style={{padding: 0}}
+                placeholder="Some location"
+                value={eventVenue}
+                onChangeText={text => setEventVenue(text)}
+              />
             </View>
             <View style={styles.halfInput}>
               <View style={[styles.input, {width: '60%'}]}>
                 <Text style={{fontSize: 10, padding: 0}}>MAX PARTICIPANTS</Text>
-                <TextInput style={{padding: 0}} placeholder="500" />
+                <TextInput
+                  style={{padding: 0}}
+                  placeholder="500"
+                  value={maxParticipants}
+                  onChangeText={text => setMaxParticipants(text)}
+                />
               </View>
               <TouchableOpacity style={styles.plusBtn}>
                 <Image source={require('../Images/minus.png')} />
@@ -76,7 +121,12 @@ export default function Home() {
             <View style={styles.halfInput}>
               <View style={[styles.input, {width: '60%'}]}>
                 <Text style={{fontSize: 10, padding: 0}}>ALERT POINT</Text>
-                <TextInput style={{padding: 0}} placeholder="355" />
+                <TextInput
+                  style={{padding: 0}}
+                  placeholder="355"
+                  value={alertPoint}
+                  onChangeText={text => setAlertPoint(text)}
+                />
               </View>
               <TouchableOpacity style={styles.plusBtn}>
                 <Image source={require('../Images/minus.png')} />
@@ -90,12 +140,21 @@ export default function Home() {
                 <Text style={{fontSize: 10, padding: 0}}>
                   NUMBER OF ENTRIES
                 </Text>
-                <TextInput style={{padding: 0}} placeholder="7" />
+                <TextInput
+                  style={{padding: 0}}
+                  placeholder="7"
+                  // value={numEntries}
+                  onChangeText={text => setNumEntries(text)}
+                />
               </View>
-              <TouchableOpacity style={styles.plusBtn}>
+              <TouchableOpacity
+                style={styles.plusBtn}
+                onPress={handleMinusPress}>
                 <Image source={require('../Images/minus.png')} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.plusBtn}>
+              <TouchableOpacity
+                style={styles.plusBtn}
+                onPress={handlePlusPress}>
                 <Image source={require('../Images/plus.png')} />
               </TouchableOpacity>
             </View>
@@ -107,7 +166,16 @@ export default function Home() {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.createBtn}
-                onPress={() => setIsShowModal(false)}>
+                onPress={() =>
+                  handleCreateEvent({
+                    id: eventData.length + 1,
+                    title: eventTitle,
+                    venue: eventVenue,
+                    maxParticipants: maxParticipants,
+                    alertPoint: alertPoint,
+                    numEntries: numEntries,
+                  })
+                }>
                 <Text style={styles.createTxt}>Create</Text>
               </TouchableOpacity>
             </View>
@@ -175,10 +243,50 @@ export default function Home() {
           </View>
         )}
       </View>
-      {/* <View style={{height: 20, backgroundColor: theme.colors.primary}}></View> */}
+
       <View style={styles.noEvent}>
-        <Image source={require('../Images/noEvents.png')} />
-        <Text style={styles.noEventText}>NO EVENTS YET</Text>
+        <Text style={styles.eventText}>EVENTS</Text>
+        <FlatList
+          data={eventData}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles.listItem}
+              onPress={() => navigation.navigate('Statistics', {item: item})}>
+              <Text style={styles.itemTitle}>{item.title}</Text>
+              <View style={styles.itemRow}>
+                <View>
+                  <Text style={styles.entryTxt}>ENTRIES</Text>
+                  <Text style={styles.entryNumber}>{item.numEntries}</Text>
+                </View>
+                <View>
+                  <Text style={styles.entryTxt}>MAX PARTICIPANTS</Text>
+                  <Text style={styles.entryNumber}>{item.maxParticipants}</Text>
+                </View>
+                <View>
+                  <Text style={styles.entryTxt}>TOTAL PARTICIPANTS</Text>
+                  <Text style={styles.entryNumber}>{item.alertPoint}</Text>
+                </View>
+              </View>
+              <View style={styles.itemSecondRow}>
+                <View style={{width: '47%', flexDirection: 'row'}}>
+                  <Text style={styles.circle}></Text>
+                  <Text style={[styles.circle, {marginLeft: -10}]}></Text>
+                  <Text style={[styles.circle, {marginLeft: -10}]}></Text>
+                  <Text style={[styles.circle, {marginLeft: -10}]}></Text>
+                </View>
+                <View style={styles.seeMore}>
+                  <Text style={{fontSize: 10, fontWeight: '400'}}>
+                    See More
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item.id.toString()}
+        />
+        {/* <Image source={require('../Images/noEvents.png')} />
+        <Text style={styles.noEventText}>NO EVENTS YET</Text> */}
       </View>
       {!isMenuVisible && (
         <TouchableOpacity
@@ -187,7 +295,7 @@ export default function Home() {
           <Text style={styles.btnText}>Create new Event</Text>
         </TouchableOpacity>
       )}
-      {isShowModal && <CreateEvent />}
+      {isShowModal && <CreateEvent addEvent={addEvent} />}
     </View>
   );
 }
@@ -207,7 +315,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   topBar: {
-    width: '95%',
+    width: '90%',
     alignSelf: 'center',
     // paddingTop: 20,
     backgroundColor: theme.colors.primary,
@@ -246,8 +354,8 @@ const styles = StyleSheet.create({
   noEvent: {
     width: width,
     height: height - height / 5,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     gap: 10,
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
@@ -396,5 +504,74 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 50,
+  },
+  entryTxt: {
+    color: '#4B4B4B',
+    fontSize: 10,
+    fontWeight: '400',
+    fontFamily: 'Roboto',
+  },
+  circle: {
+    width: 30,
+    height: 30,
+    backgroundColor: theme.colors.primary,
+    borderColor: 'white',
+    borderWidth: 1.5,
+    borderRadius: 15,
+  },
+  entryNumber: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: '700',
+    fontFamily: 'Roboto',
+    textAlign: 'center',
+  },
+  itemRow: {
+    flexDirection: 'row',
+    width: '100%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  itemTitle: {
+    color: '#101010',
+    fontSize: 18,
+    fontFamily: 'Roboto',
+    fontWeight: '700',
+    marginBottom: 20,
+  },
+  listItem: {
+    width: '90%',
+    alignSelf: 'center',
+    padding: 20,
+    backgroundColor: theme.colors.grey,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  seeMore: {
+    width: '35%',
+    borderColor: theme.colors.primary,
+    height: 30,
+    borderWidth: 1,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  eventText: {
+    width: '90%',
+    alignSelf: 'center',
+    textAlign: 'left',
+    marginTop: 20,
+    color: 'black',
+    fontFamily: 'Roboto',
+    fontSize: 25,
+    fontWeight: '900',
+  },
+  itemSecondRow: {
+    flexDirection: 'row',
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 20,
   },
 });

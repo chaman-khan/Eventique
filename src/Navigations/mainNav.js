@@ -4,6 +4,7 @@ import React from 'react';
 import Login from '../screens/login';
 import SignUP from '../screens/signup';
 import Home from '../screens/home';
+import Statistics from '../screens/statistics';
 
 function MainNav() {
   const Stack = createNativeStackNavigator();
@@ -16,6 +17,7 @@ function MainNav() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUP} />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Statistics" component={Statistics} />
       </Stack.Navigator>
     </NavigationContainer>
   );
