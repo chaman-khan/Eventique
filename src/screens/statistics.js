@@ -52,6 +52,7 @@ export default function Statistics({navigation}) {
   const barRatio = (item.alertPoint / item.maxParticipants) * 100;
   console.log(barRatio);
   const [showSetting, setShowSetting] = useState(false);
+  const [showDeleteModal, setDeleteModal] = useState(false);
 
   const handleMinusPress = () => {
     // Decrease numEntries by 1, but not below 0
@@ -182,9 +183,42 @@ export default function Statistics({navigation}) {
             </View>
             <View style={styles.btns}>
               <TouchableOpacity
-                style={styles.cancelBtn}
+                style={styles.Btn}
+                onPress={() => setShowSetting(false)}>
+                <Text
+                  style={[
+                    styles.createTxt,
+                    {backgroundColor: theme.colors.primary},
+                  ]}>
+                  Save Changes
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.Btn, {backgroundColor: '#40AA71'}]}
                 onPress={() => setIsShowModal(false)}>
-                <Text style={styles.cancelTxt}>Cancel</Text>
+                <Text style={[styles.createTxt]}>
+                  Download Event statistics
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.Btn,
+                  {
+                    borderColor: 'red',
+                    borderWidth: 1,
+                    backgroundColor: 'white',
+                  },
+                ]}
+                onPress={() => setDeleteModal(true)}>
+                <Text
+                  style={[
+                    styles.createTxt,
+                    {
+                      color: 'red',
+                    },
+                  ]}>
+                  Delete Event
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.createBtn}
@@ -202,6 +236,63 @@ export default function Statistics({navigation}) {
               </TouchableOpacity>
             </View>
           </View>
+          {showDeleteModal && (
+            <Modal>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'grey',
+                }}>
+                <View
+                  style={{
+                    width: '90%',
+                    padding: 20,
+                    backgroundColor: 'white',
+                    borderRadius: 20,
+                  }}>
+                  <Text
+                    style={{
+                      fontFamily: 'Roboto',
+                      fontSize: 20,
+                      fontWeight: '700',
+                      alignSelf: 'center',
+                      marginBottom: 15,
+                      color: 'black',
+                    }}>
+                    CONFIRM EVENT DELETION
+                  </Text>
+                  <View
+                    style={{
+                      width: '100%',
+                      paddingVertical: 10,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <TouchableOpacity
+                      style={[
+                        styles.Btn,
+                        {
+                          width: '47%',
+                          backgroundColor: 'white',
+                          borderColor: theme.colors.grey,
+                          borderWidth: 1,
+                        },
+                      ]}
+                      onPress={() => setDeleteModal(false)}>
+                      <Text style={{color: theme.colors.primary}}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.Btn, {width: '47%'}]}
+                      onPress={() => setShowSetting(false)}>
+                      <Text style={{color: 'white'}}>Confirm</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          )}
         </View>
       ) : (
         <View style={styles.noEvent}>
@@ -455,7 +546,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    gap: 20,
+    gap: 15,
     borderRadius: 20,
     paddingVertical: 20,
   },
@@ -482,28 +573,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  cancelBtn: {
-    width: '48%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: theme.colors.grey,
-    borderWidth: 1,
-    borderRadius: 10,
-    height: 55,
-  },
-  createBtn: {
-    width: '48%',
+  Btn: {
+    width: '100%',
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.colors.primary,
     borderRadius: 10,
-    height: 55,
-  },
-  cancelTxt: {
-    color: theme.colors.primary,
-    fontFamily: 'Roboto',
-    fontWeight: '400',
-    fontSize: 14,
   },
   createTxt: {
     color: 'white',
@@ -513,7 +589,7 @@ const styles = StyleSheet.create({
   },
   btns: {
     width: '95%',
-    flexDirection: 'row',
+    height: 200,
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 50,

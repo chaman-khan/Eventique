@@ -36,6 +36,7 @@ export default function Home({navigation}) {
   const [maxParticipants, setMaxParticipants] = useState('500');
   const [alertPoint, setAlertPoint] = useState('355');
   const [numEntries, setNumEntries] = useState('7');
+  const [isEmpty, setisEmpty] = useState(false);
   const ChangeLanguage1 = () => {
     setLanguage(language1);
     setLanguageIcon(language1Icon);
@@ -58,13 +59,43 @@ export default function Home({navigation}) {
     setEvents(prevEvents => [...prevEvents, {eventTitle: newEvent}]);
   };
   const CreateEvent = () => {
-    const handleMinusPress = () => {
+    const handleMinusPressParticipants = () => {
+      // Decrease numEntries by 1, but not below 0
+      setMaxParticipants(prevNumEntries =>
+        Math.max(Number(prevNumEntries) - 1, 0).toString(),
+      );
+    };
+    const handlePlusPressParticipants = () => {
+      // Increase numEntries by 1, but not beyond maxParticipants
+      setMaxParticipants(prevNumEntries => {
+        const incrementedValue = Number(prevNumEntries) + 1;
+        const maxAllowedValue = Number(50000); // Assuming maxParticipants is a state or prop
+
+        return Math.min(incrementedValue, maxAllowedValue).toString();
+      });
+    };
+    const handleMinusPressAlerts = () => {
+      // Decrease numEntries by 1, but not below 0
+      setAlertPoint(prevNumEntries =>
+        Math.max(Number(prevNumEntries) - 1, 0).toString(),
+      );
+    };
+    const handlePlusPressAlerts = () => {
+      // Increase numEntries by 1, but not beyond maxParticipants
+      setAlertPoint(prevNumEntries => {
+        const incrementedValue = Number(prevNumEntries) + 1;
+        const maxAllowedValue = Number(maxParticipants); // Assuming maxParticipants is a state or prop
+
+        return Math.min(incrementedValue, maxAllowedValue).toString();
+      });
+    };
+    const handleMinusPressEntries = () => {
       // Decrease numEntries by 1, but not below 0
       setNumEntries(prevNumEntries =>
         Math.max(Number(prevNumEntries) - 1, 0).toString(),
       );
     };
-    const handlePlusPress = () => {
+    const handlePlusPressEntries = () => {
       // Increase numEntries by 1, but not beyond maxParticipants
       setNumEntries(prevNumEntries => {
         const incrementedValue = Number(prevNumEntries) + 1;
@@ -89,7 +120,7 @@ export default function Home({navigation}) {
                 style={{padding: 0}}
                 placeholder="Some event title"
                 value={eventTitle}
-                onChangeText={text => setEventTitle(text)}
+                onChange={text => setEventTitle(text)}
               />
             </View>
             <View style={styles.input}>
@@ -98,7 +129,7 @@ export default function Home({navigation}) {
                 style={{padding: 0}}
                 placeholder="Some location"
                 value={eventVenue}
-                onChangeText={text => setEventVenue(text)}
+                onChange={text => setEventVenue(text)}
               />
             </View>
             <View style={styles.halfInput}>
@@ -108,13 +139,17 @@ export default function Home({navigation}) {
                   style={{padding: 0}}
                   placeholder="500"
                   value={maxParticipants}
-                  onChangeText={text => setMaxParticipants(text)}
+                  onChange={text => setMaxParticipants(text)}
                 />
               </View>
-              <TouchableOpacity style={styles.plusBtn}>
+              <TouchableOpacity
+                style={styles.plusBtn}
+                onPress={handleMinusPressParticipants}>
                 <Image source={require('../Images/minus.png')} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.plusBtn}>
+              <TouchableOpacity
+                style={styles.plusBtn}
+                onPress={handlePlusPressParticipants}>
                 <Image source={require('../Images/plus.png')} />
               </TouchableOpacity>
             </View>
@@ -125,13 +160,17 @@ export default function Home({navigation}) {
                   style={{padding: 0}}
                   placeholder="355"
                   value={alertPoint}
-                  onChangeText={text => setAlertPoint(text)}
+                  onChange={text => setAlertPoint(text)}
                 />
               </View>
-              <TouchableOpacity style={styles.plusBtn}>
+              <TouchableOpacity
+                style={styles.plusBtn}
+                onPress={handleMinusPressAlerts}>
                 <Image source={require('../Images/minus.png')} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.plusBtn}>
+              <TouchableOpacity
+                style={styles.plusBtn}
+                onPress={handlePlusPressAlerts}>
                 <Image source={require('../Images/plus.png')} />
               </TouchableOpacity>
             </View>
@@ -143,18 +182,18 @@ export default function Home({navigation}) {
                 <TextInput
                   style={{padding: 0}}
                   placeholder="7"
-                  // value={numEntries}
-                  onChangeText={text => setNumEntries(text)}
+                  value={numEntries}
+                  onChange={text => setNumEntries(text)}
                 />
               </View>
               <TouchableOpacity
                 style={styles.plusBtn}
-                onPress={handleMinusPress}>
+                onPress={handleMinusPressEntries}>
                 <Image source={require('../Images/minus.png')} />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.plusBtn}
-                onPress={handlePlusPress}>
+                onPress={handlePlusPressEntries}>
                 <Image source={require('../Images/plus.png')} />
               </TouchableOpacity>
             </View>
@@ -245,45 +284,63 @@ export default function Home({navigation}) {
       </View>
 
       <View style={styles.noEvent}>
-        <Text style={styles.eventText}>EVENTS</Text>
+        {!isEmpty && <Text style={styles.eventText}>EVENTS</Text>}
         <FlatList
           data={eventData}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              activeOpacity={1}
-              style={styles.listItem}
-              onPress={() => navigation.navigate('Statistics', {item: item})}>
-              <Text style={styles.itemTitle}>{item.title}</Text>
-              <View style={styles.itemRow}>
-                <View>
-                  <Text style={styles.entryTxt}>ENTRIES</Text>
-                  <Text style={styles.entryNumber}>{item.numEntries}</Text>
+          renderItem={({item}) => {
+            setisEmpty(false);
+            return (
+              <TouchableOpacity
+                activeOpacity={1}
+                style={styles.listItem}
+                onPress={() => navigation.navigate('Statistics', {item: item})}>
+                <Text style={styles.itemTitle}>{item.title}</Text>
+                <View style={styles.itemRow}>
+                  <View>
+                    <Text style={styles.entryTxt}>ENTRIES</Text>
+                    <Text style={styles.entryNumber}>{item.numEntries}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.entryTxt}>MAX PARTICIPANTS</Text>
+                    <Text style={styles.entryNumber}>
+                      {item.maxParticipants}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.entryTxt}>TOTAL PARTICIPANTS</Text>
+                    <Text style={styles.entryNumber}>{item.alertPoint}</Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.entryTxt}>MAX PARTICIPANTS</Text>
-                  <Text style={styles.entryNumber}>{item.maxParticipants}</Text>
+                <View style={styles.itemSecondRow}>
+                  <View style={{width: '47%', flexDirection: 'row'}}>
+                    <Text style={styles.circle}></Text>
+                    <Text style={[styles.circle, {marginLeft: -10}]}></Text>
+                    <Text style={[styles.circle, {marginLeft: -10}]}></Text>
+                    <Text style={[styles.circle, {marginLeft: -10}]}></Text>
+                  </View>
+                  <View style={styles.seeMore}>
+                    <Text style={{fontSize: 10, fontWeight: '400'}}>
+                      See More
+                    </Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.entryTxt}>TOTAL PARTICIPANTS</Text>
-                  <Text style={styles.entryNumber}>{item.alertPoint}</Text>
-                </View>
-              </View>
-              <View style={styles.itemSecondRow}>
-                <View style={{width: '47%', flexDirection: 'row'}}>
-                  <Text style={styles.circle}></Text>
-                  <Text style={[styles.circle, {marginLeft: -10}]}></Text>
-                  <Text style={[styles.circle, {marginLeft: -10}]}></Text>
-                  <Text style={[styles.circle, {marginLeft: -10}]}></Text>
-                </View>
-                <View style={styles.seeMore}>
-                  <Text style={{fontSize: 10, fontWeight: '400'}}>
-                    See More
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          )}
+              </TouchableOpacity>
+            );
+          }}
           keyExtractor={item => item.id.toString()}
+          ListEmptyComponent={() => {
+            setisEmpty(true);
+            return (
+              <View
+                style={[
+                  styles.noEvent,
+                  {alignItems: 'center', justifyContent: 'center'},
+                ]}>
+                <Image source={require('../Images/noEvents.png')} />
+                <Text style={styles.noEventText}>NO EVENTS YET</Text>
+              </View>
+            );
+          }}
         />
         {/* <Image source={require('../Images/noEvents.png')} />
         <Text style={styles.noEventText}>NO EVENTS YET</Text> */}
