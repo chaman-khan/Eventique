@@ -5,6 +5,7 @@ import Login from '../screens/login';
 import SignUP from '../screens/signup';
 import Home from '../screens/home';
 import Statistics from '../screens/statistics';
+import DoorKeeperHome from '../screens/DoorKeeper/home';
 
 function MainNav() {
   const Stack = createNativeStackNavigator();
@@ -12,12 +13,13 @@ function MainNav() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="DoorKeeperHome"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUP} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Statistics" component={Statistics} />
+        <Stack.Screen name="DoorKeeperHome" component={DoorKeeperHome} />
       </Stack.Navigator>
     </NavigationContainer>
   );
