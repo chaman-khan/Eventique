@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, memo} from 'react';
 import {
   View,
   Text,
@@ -31,11 +31,7 @@ export default function Home({navigation}) {
   );
   const [isShowModal, setIsShowModal] = useState(false);
   const [eventData, setEventData] = useState([]);
-  const [eventTitle, setEventTitle] = useState('First Event');
-  const [eventVenue, setEventVenue] = useState('Lahore');
-  const [maxParticipants, setMaxParticipants] = useState('500');
-  const [alertPoint, setAlertPoint] = useState('355');
-  const [numEntries, setNumEntries] = useState('7');
+
   const [isEmpty, setisEmpty] = useState(false);
   const ChangeLanguage1 = () => {
     setLanguage(language1);
@@ -56,9 +52,14 @@ export default function Home({navigation}) {
     setDropdown(false);
   };
   const addEvent = newEvent => {
-    setEvents(prevEvents => [...prevEvents, {eventTitle: newEvent}]);
+    setEventData(prevEvents => [...prevEvents, {newEvent}]);
   };
   const CreateEvent = () => {
+    const [eventTitle, setEventTitle] = useState('First Event');
+    const [eventVenue, setEventVenue] = useState('Lahore');
+    const [maxParticipants, setMaxParticipants] = useState('500');
+    const [alertPoint, setAlertPoint] = useState('355');
+    const [numEntries, setNumEntries] = useState('7');
     const handleMinusPressParticipants = () => {
       // Decrease numEntries by 1, but not below 0
       setMaxParticipants(prevNumEntries =>
@@ -120,7 +121,7 @@ export default function Home({navigation}) {
                 style={{padding: 0}}
                 placeholder="Some event title"
                 value={eventTitle}
-                onChange={text => setEventTitle(text)}
+                onChangeText={text => setEventTitle(text)}
               />
             </View>
             <View style={styles.input}>
@@ -129,7 +130,7 @@ export default function Home({navigation}) {
                 style={{padding: 0}}
                 placeholder="Some location"
                 value={eventVenue}
-                onChange={text => setEventVenue(text)}
+                onChangeText={text => setEventVenue(text)}
               />
             </View>
             <View style={styles.halfInput}>
@@ -139,7 +140,7 @@ export default function Home({navigation}) {
                   style={{padding: 0}}
                   placeholder="500"
                   value={maxParticipants}
-                  onChange={text => setMaxParticipants(text)}
+                  onChangeText={text => setMaxParticipants(text)}
                 />
               </View>
               <TouchableOpacity
@@ -160,7 +161,7 @@ export default function Home({navigation}) {
                   style={{padding: 0}}
                   placeholder="355"
                   value={alertPoint}
-                  onChange={text => setAlertPoint(text)}
+                  onChangeText={text => setAlertPoint(text)}
                 />
               </View>
               <TouchableOpacity
@@ -183,7 +184,7 @@ export default function Home({navigation}) {
                   style={{padding: 0}}
                   placeholder="7"
                   value={numEntries}
-                  onChange={text => setNumEntries(text)}
+                  onChangeText={text => setNumEntries(text)}
                 />
               </View>
               <TouchableOpacity
@@ -287,9 +288,11 @@ export default function Home({navigation}) {
         {!isEmpty && <Text style={styles.eventText}>EVENTS</Text>}
         <FlatList
           data={eventData}
-          renderItem={({item}) => {
-            setisEmpty(false);
-            return (
+          renderItem={
+            ({item}) => (
+              // {
+              //   setisEmpty(false);
+              //   return
               <TouchableOpacity
                 activeOpacity={1}
                 style={styles.listItem}
@@ -325,12 +328,15 @@ export default function Home({navigation}) {
                   </View>
                 </View>
               </TouchableOpacity>
-            );
-          }}
+            )
+            // }
+          }
           keyExtractor={item => item.id.toString()}
-          ListEmptyComponent={() => {
-            setisEmpty(true);
-            return (
+          ListEmptyComponent={
+            () => (
+              //  {
+              // setisEmpty(true);
+              // return
               <View
                 style={[
                   styles.noEvent,
@@ -339,8 +345,9 @@ export default function Home({navigation}) {
                 <Image source={require('../Images/noEvents.png')} />
                 <Text style={styles.noEventText}>NO EVENTS YET</Text>
               </View>
-            );
-          }}
+            )
+            // }
+          }
         />
         {/* <Image source={require('../Images/noEvents.png')} />
         <Text style={styles.noEventText}>NO EVENTS YET</Text> */}
@@ -352,7 +359,7 @@ export default function Home({navigation}) {
           <Text style={styles.btnText}>Create new Event</Text>
         </TouchableOpacity>
       )}
-      {isShowModal && <CreateEvent addEvent={addEvent} />}
+      {isShowModal && <CreateEvent />}
     </View>
   );
 }

@@ -45,22 +45,72 @@ const Data = [
   },
 ];
 
+const DoorKeepers = [
+  {
+    email: 'kmi@gmail.com',
+  },
+  {
+    email: 'kkk@gmail.com',
+  },
+  {
+    email: 'keeper@gmail.com',
+  },
+];
 export default function Statistics({navigation}) {
   const route = useRoute().params;
   const item = route.item;
   console.log(item);
-  const barRatio = (item.alertPoint / item.maxParticipants) * 100;
-  console.log(barRatio);
+
   const [showSetting, setShowSetting] = useState(false);
   const [showDeleteModal, setDeleteModal] = useState(false);
+  const [showConfig, setShowConfig] = useState(false);
 
-  const handleMinusPress = () => {
+  const [eventTitle, setEventTitle] = useState(item.title);
+  const [eventVenue, setEventVenue] = useState(item.venue);
+  const [maxParticipants, setMaxParticipants] = useState(item.maxParticipants);
+  const [alertPoint, setAlertPoint] = useState(item.alertPoint);
+  const [numEntries, setNumEntries] = useState(item.numEntries);
+
+  const barRatio = (alertPoint / maxParticipants) * 100;
+  console.log(barRatio);
+
+  const handleMinusPressParticipants = () => {
+    // Decrease numEntries by 1, but not below 0
+    setMaxParticipants(prevNumEntries =>
+      Math.max(Number(prevNumEntries) - 1, 0).toString(),
+    );
+  };
+  const handlePlusPressParticipants = () => {
+    // Increase numEntries by 1, but not beyond maxParticipants
+    setMaxParticipants(prevNumEntries => {
+      const incrementedValue = Number(prevNumEntries) + 1;
+      const maxAllowedValue = Number(50000); // Assuming maxParticipants is a state or prop
+
+      return Math.min(incrementedValue, maxAllowedValue).toString();
+    });
+  };
+  const handleMinusPressAlerts = () => {
+    // Decrease numEntries by 1, but not below 0
+    setAlertPoint(prevNumEntries =>
+      Math.max(Number(prevNumEntries) - 1, 0).toString(),
+    );
+  };
+  const handlePlusPressAlerts = () => {
+    // Increase numEntries by 1, but not beyond maxParticipants
+    setAlertPoint(prevNumEntries => {
+      const incrementedValue = Number(prevNumEntries) + 1;
+      const maxAllowedValue = Number(maxParticipants); // Assuming maxParticipants is a state or prop
+
+      return Math.min(incrementedValue, maxAllowedValue).toString();
+    });
+  };
+  const handleMinusPressEntries = () => {
     // Decrease numEntries by 1, but not below 0
     setNumEntries(prevNumEntries =>
       Math.max(Number(prevNumEntries) - 1, 0).toString(),
     );
   };
-  const handlePlusPress = () => {
+  const handlePlusPressEntries = () => {
     // Increase numEntries by 1, but not beyond maxParticipants
     setNumEntries(prevNumEntries => {
       const incrementedValue = Number(prevNumEntries) + 1;
@@ -69,10 +119,118 @@ export default function Statistics({navigation}) {
       return Math.min(incrementedValue, maxAllowedValue).toString();
     });
   };
-  const handleCreateEvent = newEvent => {
-    // Handle the creation of the event and update the state
-    setEventData(prevData => [...prevData, newEvent]);
-    setIsShowModal(false);
+  // const handleCreateEvent = newEvent => {
+  //   // Handle the creation of the event and update the state
+  //   setEventData(prevData => [...prevData, newEvent]);
+  //   setIsShowModal(false);
+  // };
+
+  const EventConfig = () => {
+    const [doorKeeperName, setDoorKeeperName] = useState('');
+    const [doorKeeperAddress, setDoorKeeperAddress] = useState('');
+    return (
+      <Modal transparent>
+        <View style={styles.bgModal}>
+          <View style={[styles.modell, {paddingHorizontal: 10}]}>
+            <TouchableOpacity
+              style={{alignSelf: 'flex-end'}}
+              onPress={() => setShowConfig(false)}>
+              <Image source={require('../Images/delete1.png')} />
+            </TouchableOpacity>
+            <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
+              ENTRY CONFIG
+            </Text>
+            <View style={styles.input}>
+              <Text style={{fontSize: 10, padding: 0}}>DOOR KEEPER'S ID</Text>
+              <TextInput
+                style={{padding: 0}}
+                placeholder="Door keeper's ID/name"
+                value={doorKeeperName}
+                onChangeText={text => setDoorKeeperName(text)}
+              />
+            </View>
+            <View style={styles.input}>
+              <Text style={{fontSize: 10, padding: 0}}>
+                DOOR KEEPER'S EMAIL
+              </Text>
+              <TextInput
+                style={{padding: 0}}
+                placeholder="Door keeper's email address"
+                value={doorKeeperAddress}
+                onChangeText={text => setDoorKeeperAddress(text)}
+              />
+            </View>
+            <View
+              style={{
+                width: '90%',
+                height: 50,
+                backgroundColor: theme.colors.primary,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 10,
+              }}>
+              <Text style={{color: 'white'}}>Add Keeper</Text>
+            </View>
+            <Text
+              style={{
+                width: '90%',
+                alignSelf: 'center',
+                alignContent: 'flex-start',
+                color: 'black',
+                marginTop: 30,
+              }}>
+              KEEPER(S)
+            </Text>
+            <View style={{maxHeight: 200}}>
+              <FlatList
+                data={DoorKeepers}
+                renderItem={() => (
+                  <View
+                    style={[
+                      styles.input,
+                      {
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        alignSelf: 'center',
+                      },
+                    ]}>
+                    <View style={{width: '80%'}}>
+                      <Text style={{fontSize: 10, padding: 0}}>
+                        DOOR KEEPER'S EMAIL
+                      </Text>
+                      <Text style={{color: 'black'}}>Email Address</Text>
+                    </View>
+                    <Image source={require('../Images/deleteIcon.png')} />
+                  </View>
+                )}
+              />
+            </View>
+            <TouchableOpacity
+              style={[
+                styles.Btn,
+                {
+                  width: '90%',
+                  borderColor: 'red',
+                  borderWidth: 1,
+                  backgroundColor: 'white',
+                },
+              ]}
+              onPress={() => setDeleteModal(true)}>
+              <Text
+                style={[
+                  styles.createTxt,
+                  {
+                    color: 'red',
+                  },
+                ]}>
+                Delete
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    );
   };
   return (
     <View style={{flex: 1}}>
@@ -113,8 +271,8 @@ export default function Statistics({navigation}) {
               <TextInput
                 style={{padding: 0}}
                 placeholder="Some event title"
-                value={item.title}
-                // onChangeText={text => setEventTitle(text)}
+                value={eventTitle}
+                onChangeText={text => setEventTitle(text)}
               />
             </View>
             <View style={styles.input}>
@@ -122,8 +280,8 @@ export default function Statistics({navigation}) {
               <TextInput
                 style={{padding: 0}}
                 placeholder="Some location"
-                value={item.venue}
-                // onChangeText={text => setEventVenue(text)}
+                value={eventVenue}
+                onChangeText={text => setEventVenue(text)}
               />
             </View>
             <View style={styles.halfInput}>
@@ -132,13 +290,18 @@ export default function Statistics({navigation}) {
                 <TextInput
                   style={{padding: 0}}
                   placeholder="500"
-                  value={item.maxParticipants}
+                  value={maxParticipants}
+                  onChangeText={text => setMaxParticipants(text)}
                 />
               </View>
-              <TouchableOpacity style={styles.plusBtn}>
+              <TouchableOpacity
+                style={styles.plusBtn}
+                onPress={handleMinusPressParticipants}>
                 <Image source={require('../Images/minus.png')} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.plusBtn}>
+              <TouchableOpacity
+                style={styles.plusBtn}
+                onPress={handlePlusPressParticipants}>
                 <Image source={require('../Images/plus.png')} />
               </TouchableOpacity>
             </View>
@@ -148,14 +311,26 @@ export default function Statistics({navigation}) {
                 <TextInput
                   style={{padding: 0}}
                   placeholder="355"
-                  value={item.alertPoint}
-                  // onChangeText={text => setAlertPoint(text)}
+                  value={alertPoint}
+                  onChangeText={text => {
+                    const numericValue = Number(text);
+                    if (
+                      !isNaN(numericValue) &&
+                      numericValue <= maxParticipants
+                    ) {
+                      setAlertPoint(text);
+                    }
+                  }}
                 />
               </View>
-              <TouchableOpacity style={styles.plusBtn}>
+              <TouchableOpacity
+                style={styles.plusBtn}
+                onPress={handleMinusPressAlerts}>
                 <Image source={require('../Images/minus.png')} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.plusBtn}>
+              <TouchableOpacity
+                style={styles.plusBtn}
+                onPress={handlePlusPressAlerts}>
                 <Image source={require('../Images/plus.png')} />
               </TouchableOpacity>
             </View>
@@ -167,17 +342,17 @@ export default function Statistics({navigation}) {
                 <TextInput
                   style={{padding: 0}}
                   placeholder="7"
-                  value={item.numEntries}
+                  value={numEntries}
                 />
               </View>
               <TouchableOpacity
                 style={styles.plusBtn}
-                onPress={handleMinusPress}>
+                onPress={handleMinusPressEntries}>
                 <Image source={require('../Images/minus.png')} />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.plusBtn}
-                onPress={handlePlusPress}>
+                onPress={handlePlusPressEntries}>
                 <Image source={require('../Images/plus.png')} />
               </TouchableOpacity>
             </View>
@@ -238,38 +413,10 @@ export default function Statistics({navigation}) {
           </View>
           {showDeleteModal && (
             <Modal>
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: 'grey',
-                }}>
-                <View
-                  style={{
-                    width: '90%',
-                    padding: 20,
-                    backgroundColor: 'white',
-                    borderRadius: 20,
-                  }}>
-                  <Text
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontSize: 20,
-                      fontWeight: '700',
-                      alignSelf: 'center',
-                      marginBottom: 15,
-                      color: 'black',
-                    }}>
-                    CONFIRM EVENT DELETION
-                  </Text>
-                  <View
-                    style={{
-                      width: '100%',
-                      paddingVertical: 10,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
+              <View style={styles.deleteModel}>
+                <View style={styles.deleteView}>
+                  <Text style={styles.deleteText}>CONFIRM EVENT DELETION</Text>
+                  <View style={styles.deleteButon}>
                     <TouchableOpacity
                       style={[
                         styles.Btn,
@@ -310,7 +457,7 @@ export default function Statistics({navigation}) {
                 CURRENT IN
               </Text>
               <Text>
-                {item.alertPoint}/{item.maxParticipants}
+                {alertPoint}/{maxParticipants}
               </Text>
             </View>
             <View
@@ -341,11 +488,11 @@ export default function Statistics({navigation}) {
             <View style={styles.itemRow}>
               <View>
                 <Text style={styles.entryTxt}>TOTAL IN</Text>
-                <Text style={styles.entryNumber}>{item.maxParticipants}</Text>
+                <Text style={styles.entryNumber}>{maxParticipants}</Text>
               </View>
               <View>
                 <Text style={styles.entryTxt}>TOTAL OUT</Text>
-                <Text style={styles.entryNumber}>{item.maxParticipants}</Text>
+                <Text style={styles.entryNumber}>{maxParticipants}</Text>
               </View>
               <View>
                 <Text style={styles.entryTxt}>OPENED ENTRIES</Text>
@@ -382,13 +529,14 @@ export default function Statistics({navigation}) {
               </Text>
             </View>
           </View>
-          <View>
+          <View style={{width: '90%'}}>
             <FlatList
               data={Data}
               key={item => item.id.toString()}
               numColumns={2}
               renderItem={({item}) => (
-                <View
+                <TouchableOpacity
+                  activeOpacity={1}
                   style={{
                     width: '47%',
                     backgroundColor: theme.colors.grey,
@@ -398,7 +546,8 @@ export default function Statistics({navigation}) {
                     margin: 5,
                     paddingTop: 20,
                     paddingBottom: 5,
-                  }}>
+                  }}
+                  onPress={() => setShowConfig(true)}>
                   <Text
                     style={{fontSize: 18, fontWeight: '500', color: 'black'}}>
                     Entry #{item.id}
@@ -442,12 +591,13 @@ export default function Statistics({navigation}) {
                       backgroundColor: item.color,
                       borderRadius: 10,
                     }}></Text>
-                </View>
+                </TouchableOpacity>
               )}
             />
           </View>
         </View>
       )}
+      {showConfig && <EventConfig />}
     </View>
   );
 }
@@ -532,14 +682,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   input: {
-    width: '95%',
+    // width: '100%',
+    width: '90%',
     height: 55,
     alignSelf: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     borderRadius: 10,
     backgroundColor: theme.colors.grey,
     padding: 10,
     flexShrink: 0,
+    marginVertical: 7,
   },
   modell: {
     width: '95%',
@@ -593,5 +745,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 50,
+  },
+  deleteModel: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'grey',
+  },
+  deleteView: {
+    width: '90%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+  },
+  deleteText: {
+    fontFamily: 'Roboto',
+    fontSize: 20,
+    fontWeight: '700',
+    alignSelf: 'center',
+    marginBottom: 15,
+    color: 'black',
+  },
+  deleteButon: {
+    width: '100%',
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  bgModal: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.40)',
   },
 });
