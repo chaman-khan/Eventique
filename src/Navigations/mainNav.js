@@ -13,7 +13,7 @@ function MainNav() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="DoorKeeperHome"
+        initialRouteName="Login"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUP} />

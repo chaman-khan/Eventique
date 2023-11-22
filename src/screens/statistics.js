@@ -10,6 +10,7 @@ import {
   Modal,
   TextInput,
   FlatList,
+  ScrollView,
 } from 'react-native';
 import {theme} from '../theme/theme';
 import {useRoute} from '@react-navigation/native';
@@ -269,337 +270,377 @@ export default function Statistics({navigation}) {
       </View>
       {showSetting ? (
         <View style={styles.noEvent}>
-          <View style={styles.modell}>
-            <Text style={styles.newEventTxt}>EVENT SETTINGS</Text>
-            <View style={styles.input}>
-              <Text style={{fontSize: 10, padding: 0}}>EVENT TITLE</Text>
-              <TextInput
-                style={{padding: 0}}
-                placeholder="Some event title"
-                value={eventTitle}
-                onChangeText={text => setEventTitle(text)}
-              />
-            </View>
-            <View style={styles.input}>
-              <Text style={{fontSize: 10, padding: 0}}>VENUE</Text>
-              <TextInput
-                style={{padding: 0}}
-                placeholder="Some location"
-                value={eventVenue}
-                onChangeText={text => setEventVenue(text)}
-              />
-            </View>
-            <View style={styles.halfInput}>
-              <View style={[styles.input, {width: '60%'}]}>
-                <Text style={{fontSize: 10, padding: 0}}>MAX PARTICIPANTS</Text>
+          <ScrollView>
+            <View style={styles.modell}>
+              <Text style={styles.newEventTxt}>EVENT SETTINGS</Text>
+              <View style={styles.input}>
+                <Text style={{fontSize: 10, padding: 0}}>EVENT TITLE</Text>
                 <TextInput
                   style={{padding: 0}}
-                  placeholder="500"
-                  value={maxParticipants}
-                  onChangeText={text => setMaxParticipants(text)}
+                  placeholder="Some event title"
+                  value={eventTitle}
+                  onChangeText={text => setEventTitle(text)}
                 />
               </View>
-              <TouchableOpacity
-                style={styles.plusBtn}
-                onPress={handleMinusPressParticipants}>
-                <Image source={require('../Images/minus.png')} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.plusBtn}
-                onPress={handlePlusPressParticipants}>
-                <Image source={require('../Images/plus.png')} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.halfInput}>
-              <View style={[styles.input, {width: '60%'}]}>
-                <Text style={{fontSize: 10, padding: 0}}>ALERT POINT</Text>
+              <View style={styles.input}>
+                <Text style={{fontSize: 10, padding: 0}}>VENUE</Text>
                 <TextInput
                   style={{padding: 0}}
-                  placeholder="355"
-                  value={alertPoint}
-                  onChangeText={text => {
-                    const numericValue = Number(text);
-                    if (
-                      !isNaN(numericValue) &&
-                      numericValue <= maxParticipants
-                    ) {
-                      setAlertPoint(text);
-                    }
-                  }}
+                  placeholder="Some location"
+                  value={eventVenue}
+                  onChangeText={text => setEventVenue(text)}
                 />
               </View>
-              <TouchableOpacity
-                style={styles.plusBtn}
-                onPress={handleMinusPressAlerts}>
-                <Image source={require('../Images/minus.png')} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.plusBtn}
-                onPress={handlePlusPressAlerts}>
-                <Image source={require('../Images/plus.png')} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.halfInput}>
-              <View style={[styles.input, {width: '60%'}]}>
-                <Text style={{fontSize: 10, padding: 0}}>
-                  NUMBER OF ENTRIES
-                </Text>
-                <TextInput
-                  style={{padding: 0}}
-                  placeholder="7"
-                  value={numEntries}
-                />
+              <View style={styles.halfInput}>
+                <View style={[styles.input, {width: '60%'}]}>
+                  <Text style={{fontSize: 10, padding: 0}}>
+                    MAX PARTICIPANTS
+                  </Text>
+                  <TextInput
+                    style={{padding: 0}}
+                    placeholder="500"
+                    value={maxParticipants}
+                    onChangeText={text => setMaxParticipants(text)}
+                  />
+                </View>
+                <TouchableOpacity
+                  style={styles.plusBtn}
+                  onPress={handleMinusPressParticipants}>
+                  <Image source={require('../Images/minus.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.plusBtn}
+                  onPress={handlePlusPressParticipants}>
+                  <Image source={require('../Images/plus.png')} />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                style={styles.plusBtn}
-                onPress={handleMinusPressEntries}>
-                <Image source={require('../Images/minus.png')} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.plusBtn}
-                onPress={handlePlusPressEntries}>
-                <Image source={require('../Images/plus.png')} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.btns}>
-              <TouchableOpacity
-                style={styles.Btn}
-                onPress={() => setShowSetting(false)}>
-                <Text
+              <View style={styles.halfInput}>
+                <View style={[styles.input, {width: '60%'}]}>
+                  <Text style={{fontSize: 10, padding: 0}}>ALERT POINT</Text>
+                  <TextInput
+                    style={{padding: 0}}
+                    placeholder="355"
+                    value={alertPoint}
+                    onChangeText={text => {
+                      const numericValue = Number(text);
+                      if (
+                        !isNaN(numericValue) &&
+                        numericValue <= maxParticipants
+                      ) {
+                        setAlertPoint(text);
+                      }
+                    }}
+                  />
+                </View>
+                <TouchableOpacity
+                  style={styles.plusBtn}
+                  onPress={handleMinusPressAlerts}>
+                  <Image source={require('../Images/minus.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.plusBtn}
+                  onPress={handlePlusPressAlerts}>
+                  <Image source={require('../Images/plus.png')} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.halfInput}>
+                <View style={[styles.input, {width: '60%'}]}>
+                  <Text style={{fontSize: 10, padding: 0}}>
+                    NUMBER OF ENTRIES
+                  </Text>
+                  <TextInput
+                    style={{padding: 0}}
+                    placeholder="7"
+                    value={numEntries}
+                  />
+                </View>
+                <TouchableOpacity
+                  style={styles.plusBtn}
+                  onPress={handleMinusPressEntries}>
+                  <Image source={require('../Images/minus.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.plusBtn}
+                  onPress={handlePlusPressEntries}>
+                  <Image source={require('../Images/plus.png')} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.btns}>
+                <TouchableOpacity
+                  style={styles.Btn}
+                  onPress={() => setShowSetting(false)}>
+                  <Text
+                    style={[
+                      styles.createTxt,
+                      {backgroundColor: theme.colors.primary},
+                    ]}>
+                    Save Changes
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.Btn, {backgroundColor: '#40AA71'}]}
+                  onPress={() => setIsShowModal(false)}>
+                  <Text style={[styles.createTxt]}>
+                    Download Event statistics
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
                   style={[
-                    styles.createTxt,
-                    {backgroundColor: theme.colors.primary},
-                  ]}>
-                  Save Changes
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.Btn, {backgroundColor: '#40AA71'}]}
-                onPress={() => setIsShowModal(false)}>
-                <Text style={[styles.createTxt]}>
-                  Download Event statistics
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.Btn,
-                  {
-                    borderColor: 'red',
-                    borderWidth: 1,
-                    backgroundColor: 'white',
-                  },
-                ]}
-                onPress={() => setDeleteModal(true)}>
-                <Text
-                  style={[
-                    styles.createTxt,
+                    styles.Btn,
                     {
-                      color: 'red',
+                      borderColor: 'red',
+                      borderWidth: 1,
+                      backgroundColor: 'white',
                     },
-                  ]}>
-                  Delete Event
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.createBtn}
-                onPress={() =>
-                  handleCreateEvent({
-                    id: eventData.length + 1,
-                    title: eventTitle,
-                    venue: eventVenue,
-                    maxParticipants: maxParticipants,
-                    alertPoint: alertPoint,
-                    numEntries: numEntries,
-                  })
-                }>
-                <Text style={styles.createTxt}>Create</Text>
-              </TouchableOpacity>
+                  ]}
+                  onPress={() => setDeleteModal(true)}>
+                  <Text
+                    style={[
+                      styles.createTxt,
+                      {
+                        color: 'red',
+                      },
+                    ]}>
+                    Delete Event
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.createBtn}
+                  onPress={() =>
+                    handleCreateEvent({
+                      id: eventData.length + 1,
+                      title: eventTitle,
+                      venue: eventVenue,
+                      maxParticipants: maxParticipants,
+                      alertPoint: alertPoint,
+                      numEntries: numEntries,
+                    })
+                  }>
+                  <Text style={styles.createTxt}>Create</Text>
+                </TouchableOpacity>
+              </View>
+              <Text style={{fontSize: 30}}></Text>
             </View>
-          </View>
-          {showDeleteModal && (
-            <Modal>
-              <View style={styles.deleteModel}>
-                <View style={styles.deleteView}>
-                  <Text style={styles.deleteText}>CONFIRM EVENT DELETION</Text>
-                  <View style={styles.deleteButon}>
-                    <TouchableOpacity
-                      style={[
-                        styles.Btn,
-                        {
-                          width: '47%',
-                          backgroundColor: 'white',
-                          borderColor: theme.colors.grey,
-                          borderWidth: 1,
-                        },
-                      ]}
-                      onPress={() => setDeleteModal(false)}>
-                      <Text style={{color: theme.colors.primary}}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.Btn, {width: '47%'}]}
-                      onPress={() => setShowSetting(false)}>
-                      <Text style={{color: 'white'}}>Confirm</Text>
-                    </TouchableOpacity>
+            {showDeleteModal && (
+              <Modal>
+                <View style={styles.deleteModel}>
+                  <View style={styles.deleteView}>
+                    <Text style={styles.deleteText}>
+                      CONFIRM EVENT DELETION
+                    </Text>
+                    <View style={styles.deleteButon}>
+                      <TouchableOpacity
+                        style={[
+                          styles.Btn,
+                          {
+                            width: '47%',
+                            backgroundColor: 'white',
+                            borderColor: theme.colors.grey,
+                            borderWidth: 1,
+                          },
+                        ]}
+                        onPress={() => setDeleteModal(false)}>
+                        <Text style={{color: theme.colors.primary}}>
+                          Cancel
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.Btn, {width: '47%'}]}
+                        onPress={() => {
+                          setDeleteModal(false);
+                          setShowSetting(false);
+                        }}>
+                        <Text style={{color: 'white'}}>Confirm</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </Modal>
-          )}
+              </Modal>
+            )}
+          </ScrollView>
         </View>
       ) : (
         <View style={styles.noEvent}>
-          <Text style={styles.eventText}>EVENT STATISTICS</Text>
-          <View style={styles.listItem}>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text
-                style={{
-                  color: '#101010',
-                  fontFamily: 'Roboto',
-                  fontSize: 14,
-                  fontWeight: '700',
-                }}>
-                CURRENT IN
-              </Text>
-              <Text>
-                {alertPoint}/{maxParticipants}
-              </Text>
-            </View>
-            <View
-              style={{
-                width: `100%`,
-                height: 10,
-                // borderTopRightRadius: 10,
-                // borderBottomRightRadius: 10,
-                // borderTopLeftRadius: 10,
-                // borderBottomLeftRadius: 10,
-                borderRadius: 10,
-                marginTop: 10,
-                flexDirection: 'row',
-                flexShrink: 1,
-                backgroundColor: theme.colors.grey,
-              }}>
-              <Text
-                style={{
-                  width: `${barRatio}%`,
-                  borderRadius: 10,
-                  backgroundColor: '#DDC523',
-                }}></Text>
-              <Text
-                style={{
-                  width: `${100 - barRatio}%`,
-                }}></Text>
-            </View>
-            <View style={styles.itemRow}>
-              <View>
-                <Text style={styles.entryTxt}>TOTAL IN</Text>
-                <Text style={styles.entryNumber}>{maxParticipants}</Text>
-              </View>
-              <View>
-                <Text style={styles.entryTxt}>TOTAL OUT</Text>
-                <Text style={styles.entryNumber}>{maxParticipants}</Text>
-              </View>
-              <View>
-                <Text style={styles.entryTxt}>OPENED ENTRIES</Text>
-                <Text style={styles.entryNumber}>1</Text>
-              </View>
-              <View>
-                <Text style={styles.entryTxt}>CLOSED ENTRIES</Text>
-                <Text style={styles.entryNumber}>3</Text>
-              </View>
-            </View>
-          </View>
-          <View
-            style={{
-              width: '90%',
-              alignSelf: 'center',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 10,
-            }}>
-            <Text style={styles.eventText1}>ENTRIES</Text>
-            <View
-              style={{
-                width: '30%',
-                height: 29,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderColor: theme.colors.grey,
-                borderWidth: 1,
-                borderRadius: 20,
-              }}>
-              <Text style={{fontSize: 10, fontWeight: '400', color: '#274D76'}}>
-                TOGGLE ALL
-              </Text>
-            </View>
-          </View>
-          <View style={{width: '90%go'}}>
-            <FlatList
-              data={Data}
-              key={item => item.id.toString()}
-              numColumns={2}
-              renderItem={({item}) => (
-                <TouchableOpacity
-                  activeOpacity={1}
+          <ScrollView>
+            <View style={{width: '90%'}}>
+              <Text style={styles.eventText}>EVENT STATISTICS</Text>
+              <View style={styles.listItem}>
+                <View
                   style={{
-                    width: '47%',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text
+                    style={{
+                      color: '#101010',
+                      fontFamily: 'Roboto',
+                      fontSize: 14,
+                      fontWeight: '700',
+                    }}>
+                    CURRENT IN
+                  </Text>
+                  <Text>
+                    {alertPoint}/{maxParticipants}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    width: `100%`,
+                    height: 10,
+                    // borderTopRightRadius: 10,
+                    // borderBottomRightRadius: 10,
+                    // borderTopLeftRadius: 10,
+                    // borderBottomLeftRadius: 10,
+                    borderRadius: 10,
+                    marginTop: 10,
+                    flexDirection: 'row',
+                    flexShrink: 1,
                     backgroundColor: theme.colors.grey,
+                  }}>
+                  <Text
+                    style={{
+                      width: `${barRatio}%`,
+                      borderRadius: 10,
+                      backgroundColor: '#DDC523',
+                    }}></Text>
+                  <Text
+                    style={{
+                      width: `${100 - barRatio}%`,
+                    }}></Text>
+                </View>
+                <View style={styles.itemRow}>
+                  <View>
+                    <Text style={styles.entryTxt}>TOTAL IN</Text>
+                    <Text style={styles.entryNumber}>{maxParticipants}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.entryTxt}>TOTAL OUT</Text>
+                    <Text style={styles.entryNumber}>{maxParticipants}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.entryTxt}>OPENED ENTRIES</Text>
+                    <Text style={styles.entryNumber}>1</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.entryTxt}>CLOSED ENTRIES</Text>
+                    <Text style={styles.entryNumber}>3</Text>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={{
+                  width: '90%',
+                  alignSelf: 'center',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 10,
+                }}>
+                <Text style={styles.eventText1}>ENTRIES</Text>
+                <View
+                  style={{
+                    width: '30%',
+                    height: 29,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: 10,
-                    margin: 5,
-                    paddingTop: 20,
-                    paddingBottom: 5,
-                  }}
-                  onPress={() => setShowConfig(true)}>
+                    borderColor: theme.colors.grey,
+                    borderWidth: 1,
+                    borderRadius: 20,
+                  }}>
                   <Text
-                    style={{fontSize: 18, fontWeight: '500', color: 'black'}}>
-                    Entry #{item.id}
+                    style={{fontSize: 10, fontWeight: '400', color: '#274D76'}}>
+                    TOGGLE ALL
                   </Text>
-                  <Text style={{fontSize: 10, marginTop: 10, color: 'black'}}>
-                    TOTAL IN
-                  </Text>
-                  <Text
-                    style={{fontSize: 16, fontWeight: '700', color: 'black'}}>
-                    {item.totalIn}
-                  </Text>
-                  <Text style={{fontSize: 10, marginTop: 10, color: 'black'}}>
-                    TOTAL OUT
-                  </Text>
-                  <Text
-                    style={{fontSize: 16, fontWeight: '700', color: 'black'}}>
-                    {item.totalOut}
-                  </Text>
-                  <View
-                    style={{
-                      width: '80%',
-                      height: 30,
-                      alignSelf: 'center',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: item.color,
-                      borderRadius: 20,
-                      marginTop: 15,
-                      marginBottom: 5,
-                    }}>
-                    <Text
-                      style={{fontSize: 12, color: 'white', fontWeight: '700'}}>
-                      {item.isOpened}
-                    </Text>
-                  </View>
-                  <Text
-                    style={{
-                      width: '40%',
-                      height: 5,
-                      alignSelf: 'center',
-                      backgroundColor: item.color,
-                      borderRadius: 10,
-                    }}></Text>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
+                </View>
+              </View>
+              <View
+                style={{width: '90%', alignSelf: 'center', paddingBottom: 90}}>
+                <FlatList
+                  data={Data}
+                  key={item => item.id.toString()}
+                  numColumns={2}
+                  renderItem={({item}) => (
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      style={{
+                        width: '47%',
+                        backgroundColor: theme.colors.grey,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 10,
+                        margin: 5,
+                        paddingTop: 20,
+                        paddingBottom: 5,
+                      }}
+                      onPress={() => setShowConfig(true)}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '500',
+                          color: 'black',
+                        }}>
+                        Entry #{item.id}
+                      </Text>
+                      <Text
+                        style={{fontSize: 10, marginTop: 10, color: 'black'}}>
+                        TOTAL IN
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: '700',
+                          color: 'black',
+                        }}>
+                        {item.totalIn}
+                      </Text>
+                      <Text
+                        style={{fontSize: 10, marginTop: 10, color: 'black'}}>
+                        TOTAL OUT
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: '700',
+                          color: 'black',
+                        }}>
+                        {item.totalOut}
+                      </Text>
+                      <View
+                        style={{
+                          width: '80%',
+                          height: 30,
+                          alignSelf: 'center',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: item.color,
+                          borderRadius: 20,
+                          marginTop: 15,
+                          marginBottom: 5,
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: 'white',
+                            fontWeight: '700',
+                          }}>
+                          {item.isOpened}
+                        </Text>
+                      </View>
+                      <Text
+                        style={{
+                          width: '40%',
+                          height: 5,
+                          alignSelf: 'center',
+                          backgroundColor: item.color,
+                          borderRadius: 10,
+                        }}></Text>
+                    </TouchableOpacity>
+                  )}
+                />
+              </View>
+            </View>
+          </ScrollView>
         </View>
       )}
       {showConfig && <EventConfig />}
@@ -633,7 +674,7 @@ const styles = StyleSheet.create({
   },
   noEvent: {
     width: width,
-    height: height,
+    // height: height,
     alignItems: 'center',
     gap: 10,
     backgroundColor: 'white',
@@ -725,7 +766,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   halfInput: {
-    width: '95%',
+    width: '90%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

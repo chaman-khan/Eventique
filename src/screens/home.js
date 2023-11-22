@@ -243,7 +243,9 @@ export default function Home({navigation}) {
         </View>
         {isMenuVisible && (
           <View style={styles.menu}>
-            <TouchableOpacity style={styles.logoutBtn}>
+            <TouchableOpacity
+              style={styles.logoutBtn}
+              onPress={() => navigation.navigate('Login')}>
               <Text>Logout</Text>
             </TouchableOpacity>
             <Text style={styles.text}>Change Language</Text>
@@ -288,11 +290,9 @@ export default function Home({navigation}) {
         {!isEmpty && <Text style={styles.eventText}>EVENTS</Text>}
         <FlatList
           data={eventData}
-          renderItem={
-            ({item}) => (
-              // {
-              //   setisEmpty(false);
-              //   return
+          renderItem={({item}) => {
+            setisEmpty(false);
+            return (
               <TouchableOpacity
                 activeOpacity={1}
                 style={styles.listItem}
@@ -328,15 +328,12 @@ export default function Home({navigation}) {
                   </View>
                 </View>
               </TouchableOpacity>
-            )
-            // }
-          }
+            );
+          }}
           keyExtractor={item => item.id.toString()}
-          ListEmptyComponent={
-            () => (
-              //  {
-              // setisEmpty(true);
-              // return
+          ListEmptyComponent={() => {
+            setisEmpty(true);
+            return (
               <View
                 style={[
                   styles.noEvent,
@@ -345,9 +342,8 @@ export default function Home({navigation}) {
                 <Image source={require('../Images/noEvents.png')} />
                 <Text style={styles.noEventText}>NO EVENTS YET</Text>
               </View>
-            )
-            // }
-          }
+            );
+          }}
         />
         {/* <Image source={require('../Images/noEvents.png')} />
         <Text style={styles.noEventText}>NO EVENTS YET</Text> */}
@@ -416,14 +412,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   noEvent: {
-    width: width,
-    height: height - height / 5,
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    // width: width,
+    height: height,
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 10,
     backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderRadius: 20,
     marginTop: -20,
   },
   button: {
