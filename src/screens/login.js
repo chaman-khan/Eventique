@@ -8,11 +8,46 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {theme} from '../theme/theme';
+import auth from '@react-native-firebase/auth';
 
 function Login({navigation}) {
   const {width, height} = Dimensions.get('screen');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const SignInFirebase = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Email or Password must not be empty');
+    } else {
+      try {
+        const userCredential = await auth().signInWithEmailAndPassword(
+          email,
+          password,
+        );
+        // User signed in successfully
+        console.log('User signed in:', userCredential.user);
+        navigation.navigate('Home');
+      } catch (error) {
+        // Handle errors here
+        // console.error('Error signing in:', error.message);
+        // Alert.alert('Error', error.message);
+        if (error.message === '[auth/invalid-email] The email address is badly formatted.') {
+          console.log('That email address is badly formatted.');
+          Alert.alert('Error', 'That email address is badly formatted.');
+        }
+
+        if (error.message === '[auth/invalid-login] An internal error has occurred. [ INVALID_LOGIN_CREDENTIALS ]') {
+          console.log('Invalid Credentials');
+          Alert.alert('Error', 'Invalid Credentials');
+        }
+
+        console.error(error);
+      }
+    }
+  };
+
   return (
     <ScrollView style={{flex: 1}}>
       <View
@@ -31,11 +66,21 @@ function Login({navigation}) {
       <View style={{gap: 10, marginTop: 30}}>
         <View style={styles.input}>
           <Text style={{fontSize: 10, padding: 0}}>EMAIL</Text>
-          <TextInput style={{padding: 0}} placeholder="example@gmail.com" />
+          <TextInput
+            style={{padding: 0}}
+            placeholder="example@gmail.com"
+            value={email}
+            onChangeText={txt => setEmail(txt)}
+          />
         </View>
         <View style={styles.input}>
           <Text style={{fontSize: 10, padding: 0}}>Password</Text>
-          <TextInput style={{padding: 0}} placeholder=". . . . . ." />
+          <TextInput
+            style={{padding: 0}}
+            placeholder=". . . . . ."
+            value={password}
+            onChangeText={txt => setPassword(txt)}
+          />
         </View>
       </View>
       <View
@@ -47,7 +92,7 @@ function Login({navigation}) {
         }}>
         <TouchableOpacity
           style={[styles.button, {backgroundColor: theme.colors.primary}]}
-          onPress={() => navigation.navigate('Home')}>
+          onPress={SignInFirebase}>
           <Text style={{color: 'white'}}>Sign In</Text>
         </TouchableOpacity>
         <TouchableOpacity

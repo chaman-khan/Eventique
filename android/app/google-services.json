@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "526996690826",
+    "project_id": "eventique-4639d",
+    "storage_bucket": "eventique-4639d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526996690826:android:b35df0895df4416c809a73",
+        "android_client_info": {
+          "package_name": "com.eventique"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5oPakZml5U4kbA-b8NcM3U_BdtZAt3iw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

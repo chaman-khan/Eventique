@@ -8,11 +8,38 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {theme} from '../theme/theme';
+import auth from '@react-native-firebase/auth';
 
 function SignUP({navigation}) {
   const {width, height} = Dimensions.get('screen');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const SignUpFirebase = () => {
+    if (email || password == '') {
+      Alert.alert('Error', 'Email or Password must not be empty');
+    } else
+      auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          console.log('User account created & signed in!');
+        })
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            console.log('That email address is already in use!');
+            Alert.alert('Error', 'That email address is already in use!');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+            Alert.alert('Error', 'That email address is invalid!');
+          }
+
+          console.error(error);
+        });
+  };
   return (
     <ScrollView style={{flex: 1}}>
       <View
@@ -31,11 +58,21 @@ function SignUP({navigation}) {
       <View style={{gap: 10, marginTop: 30}}>
         <View style={styles.input}>
           <Text style={{fontSize: 10, padding: 0}}>EMAIL</Text>
-          <TextInput style={{padding: 0}} placeholder="example@gmail.com" />
+          <TextInput
+            style={{padding: 0}}
+            placeholder="example@gmail.com"
+            value={email}
+            onChangeText={txt => setEmail(txt)}
+          />
         </View>
         <View style={styles.input}>
           <Text style={{fontSize: 10, padding: 0}}>Password</Text>
-          <TextInput style={{padding: 0}} placeholder=". . . . . ." />
+          <TextInput
+            style={{padding: 0}}
+            placeholder=". . . . . ."
+            value={password}
+            onChangeText={txt => setPassword(txt)}
+          />
         </View>
       </View>
       <View
@@ -46,7 +83,8 @@ function SignUP({navigation}) {
           gap: 15,
         }}>
         <TouchableOpacity
-          style={[styles.button, {backgroundColor: theme.colors.primary}]}>
+          style={[styles.button, {backgroundColor: theme.colors.primary}]}
+          onPress={SignUpFirebase}>
           <Text style={{color: 'white'}}>Sign Up</Text>
         </TouchableOpacity>
         <TouchableOpacity
