@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {theme} from '../theme/theme';
 import auth from '@react-native-firebase/auth';
+const {width, height} = Dimensions.get('screen');
 
 function Login({navigation}) {
   const {width, height} = Dimensions.get('screen');
@@ -126,5 +127,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button1: {
+    width: width,
+    height: height
+  }
 });
 export default Login;
