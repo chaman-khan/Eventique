@@ -42,7 +42,15 @@ export default function Home({navigation}) {
     setLanguage2Icon(languageIcon);
     setDropdown(false);
   };
-  
+  const ChangeLanguage2 = () => {
+    setLanguage(language2);
+    setLanguageIcon(language2Icon);
+    setLanguage1(language);
+    setLanguage1Icon(languageIcon);
+    setLanguage2(language1);
+    setLanguage2Icon(language1Icon);
+    setDropdown(false);
+  };
   const addEvent = newEvent => {
     setEventData(prevEvents => [...prevEvents, {newEvent}]);
   };
