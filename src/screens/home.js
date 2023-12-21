@@ -226,10 +226,10 @@ export default function Home({navigation}) {
   };
   return (
     <View style={{flex: 1}}>
-      <View style={styles.menuView}>
+      {/* <View style={styles.menuView}>
         <View style={styles.topBar}>
           <TouchableOpacity onPress={() => setMenuVisible(!isMenuVisible)}>
-            {isMenuVisible ? (
+            {isMenuVisible ? ( */}
               <Image source={require('../Images/cross.png')} />
             ) : (
               <Image source={require('../Images/menu.png')} />
