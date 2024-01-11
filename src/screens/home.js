@@ -51,9 +51,9 @@ export default function Home({navigation}) {
     setLanguage2Icon(language1Icon);
     setDropdown(false);
   };
-  const addEvent = newEvent => {
-    setEventData(newEvent);
-  };
+  // const addEvent = newEvent => {
+  //   setEventData(prevEvents => [...prevEvents, {newEvent}]);
+  // };
   const CreateEvent = () => {
     const [eventTitle, setEventTitle] = useState('First Event');
     const [eventVenue, setEventVenue] = useState('Lahore');
