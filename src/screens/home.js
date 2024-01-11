@@ -52,7 +52,7 @@ export default function Home({navigation}) {
     setDropdown(false);
   };
   const addEvent = newEvent => {
-    setEventData(prevEvents => [...prevEvents, {newEvent}]);
+    setEventData(newEvent);
   };
   const CreateEvent = () => {
     const [eventTitle, setEventTitle] = useState('First Event');
